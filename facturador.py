@@ -17,7 +17,7 @@ from selenium.webdriver.common.keys import Keys
 import random
 from tkinter import messagebox
 from datetime import datetime, timedelta
-from math import nan
+from selenium.webdriver.support.ui import Select
 
 
 def ingreso_afip(cuit, clave):
@@ -114,10 +114,12 @@ def emitir_facturas(archivo, cuit, clave, contribuyente):
         time.sleep(random.randint(1,2))
         
         # Hace click en el punto de venta elegido y continúa
-        time.sleep(random.randint(1,2))
-        driver.find_element(By.XPATH, f"//*[@id='puntodeventa']/option[{punto_venta}]").click() 
+
+        select = Select(driver.find_element(By.ID, 'puntodeventa'))
         time.sleep(2)
+        select.select_by_value(f'{punto_venta}')
         driver.find_element(By.XPATH, "//*[@id='contenido']/form/input[2]").click() 
+
         time.sleep(random.randint(1,2))
 
         # Ingresa la fecha de la factura
