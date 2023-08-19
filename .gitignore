@@ -2,3 +2,5 @@ chromedriver.exe
 listado_clientes.xlsx
 listado_cf.xlsx
 __pycache__/
+output/
+setup/

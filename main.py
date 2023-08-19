@@ -11,11 +11,13 @@
 
 import tkinter as tk
 from facturador import emitir_facturas, generar_archivo_cf
-
+from tkinter import ttk
 from tkinter import messagebox
 from tkinter import Label, Button, StringVar, IntVar, DoubleVar
 from tkinter.ttk import Separator, Combobox, Entry
 from tkcalendar import DateEntry  
+import babel.numbers
+import webbrowser
 
 # Variables globales
 cuit_var = None
@@ -42,13 +44,17 @@ def facturar_a_CF(cuit, clave, contribuyente):
     emitir_facturas(archivo_cf, cuit, clave, contribuyente)
     messagebox.showinfo("Información", "Facturación a CF finalizada")
 
+def link_clicked():
+    webbrowser.open_new_tab("https://cafecito.app/diego-dotcom")
+
 def create_window():
     global cuit_var, clave_var, punto_venta_var, fecha_desde_var, fecha_hasta_var, facturas_por_dia_var
     global redondeo_var, importe_min_var, importe_max_var, redondeo_importe_var, tipo_var
 
     root = tk.Tk()
-    root.title("Facturación automática")
-    root.geometry("640x400")
+    root.title("Bot facturador")
+    root.geometry("640x470")
+    root.iconbitmap("icono.ico")
 
 
     # Frame para agrupar los elementos de configuración para facturar a CF
@@ -96,7 +102,7 @@ def create_window():
     Entry(frame_configurar, textvariable=importe_max_var, justify='right', width=8).grid(row=2, column=4, padx=5, pady=2, sticky='e')
 
     Label(frame_configurar, text="Redondeo de importe:").grid(row=3, column=3, sticky='e')
-    Entry(frame_configurar, textvariable=redondeo_importe_var, justify='right', width=4).grid(row=3, column=4, padx=5, pady=2, sticky='e')
+    Entry(frame_configurar, textvariable=redondeo_importe_var, justify='right', width=5).grid(row=3, column=4, padx=5, pady=2, sticky='e')
 
     Label(frame_configurar, text="*Descripción:").grid(row=4, column=3, sticky='e')
     Entry(frame_configurar, textvariable=descripcion_var, justify='right', width=20).grid(row=4, column=4, padx=5, sticky='e')
@@ -106,7 +112,7 @@ def create_window():
         punto_venta_var.get(), fecha_desde_var.get(),
         fecha_hasta_var.get(), facturas_por_dia_var.get(), redondeo_var.get(),
         importe_min_var.get(), importe_max_var.get(), descripcion_var.get(), redondeo_importe_var.get(), tipo_var.get()
-    )).grid(row=6, column=4, padx=5, sticky='e')
+    )).grid(row=6, column=3, columnspan=2, padx=5, sticky='e')
 
 
     # Separación
@@ -136,6 +142,21 @@ def create_window():
         cuit_var.get(), clave_var.get(), contribuyente_var.get()
     ))
     btn_facturar_desde_archivo.pack(pady=8)
+
+
+    # Separación
+    separator = Separator(root, orient='horizontal')
+    separator.pack(fill='x', pady=5)
+
+
+
+    # Frame para agrupar elementos de créditos
+    frame_colaborar = tk.Frame(root)
+    frame_colaborar.pack(pady=5)
+    Label(frame_colaborar, text="Si te simplificó el trabajo, colaborá con el proyecto!").pack(side=tk.LEFT)
+    btn_colaborar = Button(frame_colaborar, text="Cafecito", command=link_clicked)
+    btn_colaborar.pack(side=tk.RIGHT, padx=5)
+    Label(root, text="https://twitter.com/diegom3ndizabal").pack(side=tk.BOTTOM, pady=5)
 
     root.mainloop()
 
